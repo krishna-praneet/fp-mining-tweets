@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+	<body>
+		<h1 align="center"> Tweet streaming with kafka and spark</h1>
+		<p align="center"> The total tweet count and the frequent patterns on the tweets in the last 10 minutes are displayed. The results are computed every 15 seconds.</p>
+		
+		<p align="center">Select the region:</p>
+		<div align="center"><select name="Region" id="region" align="center" onchange = "displayInfo() ">
+		  <option value="ny">New York</option>
+		  <option value="ca">California</option>
+		</select></div>
+
+		<div align="center">
+		<p id="count">Tweet Count:</p>
+		<pre id="count-info"></pre>
+		</div>
+
+
+		<div align="center">
+		<p id="patterns">Patterns:</p>
+		<pre id="fp-info"></pre>
+		</div>
+		
+
+	<script>
+		function displayInfo(){
+			var x = document.getElementById("region").value;
+			if (x=="ny") {
+				fetch("/file/ny_tweets.json")
+					.then(results => results.json())	
+					.then(function(data){
+						document.getElementById("count-info").innerHTML = data.count;
+						document.getElementById("fp-info").innerHTML = data.fp;
+
+					});
+			} else if (x=="ca") {
+				fetch("/file/ca_tweets.json")
+					.then(results => results.json())	
+					.then(function(data){
+						document.getElementById("count-info").innerHTML = data.count;
+						document.getElementById("fp-info").innerHTML = data.fp;
+					});
+			
+			}
+		}
+
+
+		setInterval(displayInfo, 15000);
+	</script>
+	</body>
+</html>
